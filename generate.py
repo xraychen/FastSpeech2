@@ -156,7 +156,7 @@ def synthesize(
         f0_output_ = f0_output[i, :src_length].detach().cpu().numpy()
         energy_output_ = energy_output[i, :src_length].detach().cpu().numpy()
         duration_output_ = (
-            duration_output[i, :src_length].detach().cpu().numpy().astype(np.int)
+            duration_output[i, :src_length].detach().cpu().numpy().astype(np.int32)
         )
 
         np.save(
