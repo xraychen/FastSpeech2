@@ -17,22 +17,33 @@ from model.loss import FastSpeech2Loss
 from model.optimizer import ScheduledOptim
 from plot.utils import plot_mel
 
+from tqdm import tqdm
+
 
 def main(args):
     torch.manual_seed(0)
 
     # Get device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f'DEVICE: {device}')
 
     # Get dataset
     dataset = Dataset("train.txt")
+    # loader = DataLoader(
+    #     dataset,
+    #     batch_size=hp.batch_size ** 2,
+    #     shuffle=True,
+    #     collate_fn=dataset.collate_fn,
+    #     drop_last=True,
+    #     num_workers=0,
+    # )
     loader = DataLoader(
         dataset,
         batch_size=hp.batch_size ** 2,
         shuffle=True,
         collate_fn=dataset.collate_fn,
         drop_last=True,
-        num_workers=0,
+        num_workers=8,
     )
 
     # Define model
@@ -96,7 +107,7 @@ def main(args):
     model = model.train()
     total_step = hp.epochs * len(loader) * hp.batch_size
     for epoch in range(hp.epochs):
-        for i, batchs in enumerate(loader):
+        for i, batchs in tqdm(enumerate(loader)):
             for j, data_of_batch in enumerate(batchs):
                 start_time = time.perf_counter()
 
@@ -294,7 +305,7 @@ def main(args):
                     energy = energy[0, :src_length].detach().cpu().numpy()
                     f0_output = f0_output[0, :src_length].detach().cpu().numpy()
                     energy_output = energy_output[0, :src_length].detach().cpu().numpy()
-                    duration = D[0, :src_length].detach().cpu().numpy().astype(np.int)
+                    duration = D[0, :src_length].detach().cpu().numpy().astype(np.int32)
 
                     plot_mel(
                         [

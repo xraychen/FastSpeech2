@@ -3,8 +3,8 @@ import os
 
 # Dataset
 dataset = "M2VoC"
-aishell3_path = "./AISHELL-3"
-m2voc_path = "./M2VoC"
+aishell3_path = "./dataset/AISHELL-3"
+m2voc_path = "./dataset/M2VoC"
 
 text_cleaners = []
 language = "zh"
@@ -51,11 +51,17 @@ variance_predictor_dropout = 0.5
 max_seq_len = 1000
 
 
+# # Quantization for F0 and energy
+# f0_min = -3.758
+# f0_max = 10.071
+# energy_min = -1.684
+# energy_max = 6.827
+
 # Quantization for F0 and energy
-f0_min = -3.758
-f0_max = 10.071
-energy_min = -1.684
-energy_max = 6.827
+f0_min = -2.5711632250636907
+f0_max = 12.029582975331623
+energy_min = -1.5173659324645996
+energy_max = 7.439907550811768
 
 # For plotting F0 curves
 f0_mean = 207.646

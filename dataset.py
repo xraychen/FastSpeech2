@@ -88,7 +88,8 @@ class Dataset(Dataset):
                     "adain": adain_emb,
                 }
                 break
-            except:
+            except Exception as e:
+                # print(e)
                 idx = (idx + 1) % self.__len__()
 
         return sample
