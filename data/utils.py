@@ -118,14 +118,18 @@ def process_utterance(in_dir, out_dir, speaker, basename):
         return None
 
     # perform linear interpolation
-    nonzero_ids = np.where(f0 != 0)[0]
-    interp_fn = interp1d(
-        nonzero_ids,
-        f0[nonzero_ids],
-        fill_value=(f0[nonzero_ids[0]], f0[nonzero_ids[-1]]),
-        bounds_error=False,
-    )
-    f0 = interp_fn(np.arange(0, len(f0)))
+    try:
+        nonzero_ids = np.where(f0 != 0)[0]
+        interp_fn = interp1d(
+            nonzero_ids,
+            f0[nonzero_ids],
+            fill_value=(f0[nonzero_ids[0]], f0[nonzero_ids[-1]]),
+            bounds_error=False,
+        )
+        f0 = interp_fn(np.arange(0, len(f0)))
+    except Exception as e:
+        print(e)
+        return None
 
     # Compute mel-scale spectrogram and energy
     mel_spectrogram, energy = Audio.tools.get_mel_from_wav(wav)
